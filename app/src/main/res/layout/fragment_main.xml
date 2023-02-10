@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".screens.main.MainFragment"
+    android:orientation="vertical">
+
+    <TextView
+        android:textColor="@color/greyBlack"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/app_name"
+        android:textAlignment="center"
+        android:textSize="40sp"/>
+
+    <TextView
+        android:layout_marginTop="42dp"
+        android:layout_marginLeft="15dp"
+        android:textColor="@color/greyBlack"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Popular News"
+        android:textSize="16sp"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/news_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:clipToPadding="false"
+        android:paddingBottom="50dp"/>
+
+    <ProgressBar
+        android:id="@+id/pag_progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="?attr/progressBarStyle"
+        android:visibility="invisible"
+        android:layout_gravity="center"/>
+
+</LinearLayout>
