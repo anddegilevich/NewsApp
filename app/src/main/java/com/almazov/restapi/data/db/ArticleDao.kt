@@ -1,16 +1,13 @@
 package com.almazov.restapi.data.db
 
-import androidx.lifecycle.LiveData
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import com.almazov.restapi.model.Article
 
+@Dao
 interface ArticleDao {
 
     @Query("SELECT * FROM articles")
-    suspend fun getAllArticles() : LiveData<List<Article>>
+    fun getAllArticles() : List<Article>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertArticle(article: Article)

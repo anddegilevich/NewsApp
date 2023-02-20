@@ -8,7 +8,11 @@
         android:id="@+id/detailsFragment"
         android:name="com.almazov.restapi.screens.details.DetailsFragment"
         android:label="fragment_details"
-        tools:layout="@layout/fragment_details" />
+        tools:layout="@layout/fragment_details" >
+        <argument
+            android:name="article"
+            app:argType="com.almazov.restapi.model.Article" />
+    </fragment>
     <fragment
         android:id="@+id/favouriteFragment"
         android:name="com.almazov.restapi.screens.favourite.FavouriteFragment"

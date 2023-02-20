@@ -6,8 +6,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.almazov.restapi.R
 import com.almazov.restapi.databinding.FragmentMainBinding
 import com.almazov.restapi.screens.adapters.NewsAdapter
 import com.almazov.restapi.utils.Resource
@@ -33,7 +36,8 @@ class MainFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initAdapter()
+        initAdapter(view)
+
         viewModel.newsLiveData.observe(viewLifecycleOwner) { responce ->
             when (responce) {
                 is Resource.Success -> {
@@ -56,12 +60,18 @@ class MainFragment : Fragment() {
         }
     }
 
-    private fun initAdapter() {
+    private fun initAdapter(view: View) {
         newsAdapter = NewsAdapter()
         news_recycler_view.apply {
             adapter = newsAdapter
             layoutManager = LinearLayoutManager(activity)
         }
+
+        newsAdapter.setOnItemClickListener {
+            val bundle = bundleOf("article" to it)
+            view.findNavController().navigate(R.id.action_mainFragment_to_detailsFragment, bundle)
+        }
+
     }
 
 }

@@ -1,10 +1,15 @@
 package com.almazov.restapi.di
 
+import android.content.Context
+import androidx.room.Room
 import com.almazov.restapi.data.api.NewsService
+import com.almazov.restapi.data.db.ArticleDao
+import com.almazov.restapi.data.db.ArticleDatabase
 import com.almazov.restapi.utils.Constants.Companion.BASE_URL
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -35,4 +40,13 @@ object AppModule {
         .build()
         .create(NewsService::class.java)
 
+    @Provides
+    @Singleton
+    fun provideArticleDatabase(@ApplicationContext context: Context) =
+        Room.databaseBuilder(context,ArticleDatabase::class.java,"article_database").build()
+
+    @Provides
+    fun provideArticleDao(appDatabase: ArticleDatabase): ArticleDao {
+        return appDatabase.getArticleDao()
+    }
 }

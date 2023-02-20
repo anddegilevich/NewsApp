@@ -17,7 +17,7 @@ class MainViewModel @Inject constructor(private val repository: NewsRepository):
     var newsPage = 1
 
     init {
-        getNews("ru")
+        getNews("us")
     }
 
     private fun getNews(countryCode: String) = viewModelScope.launch {

@@ -1,14 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".screens.search.SearchFragment">
-
-    <!-- TODO: Update blank fragment layout -->
+    tools:context=".screens.search.SearchFragment"
+    android:orientation="vertical">
+    
     <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:layout_marginHorizontal="15dp"
+        android:text="Search"
+        android:textSize="20sp"
+        android:textColor="@color/black"
+        android:textStyle="bold"/>
+    
+    <EditText
+        android:id="@+id/edit_search"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="19dp"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="24dp"
+        android:hint="Musk invited"
+        android:textColor="@color/greyBlack"
+        android:textSize="17sp"/>
 
-</FrameLayout>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/news_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:clipToPadding="false"
+        android:paddingBottom="50dp"
+        tools:listitem="@layout/item_article"
+        tools:itemCount="2"/>
+
+    <ProgressBar
+        android:id="@+id/pag_progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="?attr/progressBarStyle"
+        android:visibility="invisible"
+        android:layout_gravity="center"/>
+
+</LinearLayout>
