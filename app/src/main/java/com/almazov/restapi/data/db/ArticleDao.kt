@@ -1,15 +1,19 @@
 package com.almazov.restapi.data.db
 
+import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.almazov.restapi.model.Article
 
 @Dao
 interface ArticleDao {
 
-    @Query("SELECT * FROM articles")
-    fun getAllArticles() : List<Article>
+    @Query("SELECT * FROM articles ORDER BY publishedAt DESC")
+    fun getAllArticles() : LiveData<List<Article>>
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Query("SELECT url FROM articles")
+    fun getFavouriteUrls() : LiveData<List<String>>
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertArticle(article: Article)
 
     @Delete

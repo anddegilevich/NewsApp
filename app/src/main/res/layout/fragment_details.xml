@@ -42,7 +42,7 @@
                 android:layout_height="24dp"
                 android:layout_marginEnd="9dp"
                 android:layout_marginBottom="18dp"
-                android:src="@drawable/ic_favourite"
+                android:src="@drawable/ic_like"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/icon_share"
                 app:tint="@color/teal"/>

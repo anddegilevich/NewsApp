@@ -11,6 +11,7 @@ import android.webkit.URLUtil
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import com.almazov.restapi.R
 import com.almazov.restapi.databinding.FragmentDetailsBinding
@@ -62,6 +63,10 @@ class DetailsFragment : Fragment() {
                 } catch (e: Exception) {
                     Toast.makeText(context,"The device doesn't have any browser to view the document", Toast.LENGTH_SHORT).show()
                 }
+            }
+
+            mBinding.iconBack.setOnClickListener {
+                view.findNavController().popBackStack()
             }
 
             mBinding.iconFavourite.setOnClickListener{

@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="18dp"
         android:layout_marginHorizontal="15dp"
-        android:text="Search"
+        android:text="@string/search"
         android:textSize="20sp"
         android:textColor="@color/black"
         android:textStyle="bold"/>
@@ -21,9 +21,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="19dp"
-        android:paddingHorizontal="16dp"
-        android:paddingVertical="24dp"
-        android:hint="Musk invited"
+        android:layout_marginHorizontal="15dp"
+        android:paddingVertical="10dp"
+        android:hint="@string/musk_invited"
         android:textColor="@color/greyBlack"
         android:textSize="17sp"/>
 
