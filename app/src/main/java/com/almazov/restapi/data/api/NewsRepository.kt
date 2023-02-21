@@ -17,8 +17,9 @@ class NewsRepository @Inject constructor(
 
     fun getFavouriteArticles() = articleDao.getAllArticles()
 
-    fun getFavouriteUrls() = articleDao.getFavouriteUrls()
+    suspend fun checkFavouriteUrl(url: String) = articleDao.checkFavouriteUrl(url = url)
 
     suspend fun addToFavourite(article: Article) = articleDao.insertArticle(article = article)
+
     suspend fun deleteFromFavourite(article: Article) = articleDao.deleteArticle(article = article)
 }

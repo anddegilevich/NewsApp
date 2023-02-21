@@ -42,19 +42,20 @@
             />
     </LinearLayout>
 
-    <ImageView
+    <CheckBox
         android:id="@+id/icon_favourite"
         android:layout_gravity="center"
-        android:layout_width="18dp"
-        android:layout_height="18dp"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
         android:layout_marginStart="12dp"
-        android:src="@drawable/ic_favourite"/>
+        android:button="@drawable/ic_like"
+        android:buttonTint="@color/black"/>
 
     <ImageView
         android:id="@+id/icon_share"
         android:layout_gravity="center"
-        android:layout_width="18dp"
-        android:layout_height="18dp"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
         android:layout_marginStart="12dp"
         android:src="@drawable/ic_share"/>
 

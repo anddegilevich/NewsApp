@@ -10,20 +10,25 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.OnScrollListener
 import com.almazov.restapi.R
 import com.almazov.restapi.databinding.FragmentMainBinding
 import com.almazov.restapi.screens.adapters.NewsAdapter
+import com.almazov.restapi.screens.adapters.NewsAdapterInterface
+import com.almazov.restapi.screens.adapters.NewsAdapterViewModel
 import com.almazov.restapi.utils.Resource
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_main.*
 
 @AndroidEntryPoint
-class MainFragment : Fragment() {
+class MainFragment : Fragment(), NewsAdapterInterface {
 
     private var _binding: FragmentMainBinding? = null
     private val mBinding get() = _binding!!
 
     private val viewModel by viewModels<MainViewModel>()
+    private val viewModelAdapter by viewModels<NewsAdapterViewModel>()
     lateinit var newsAdapter: NewsAdapter
 
     override fun onCreateView(
@@ -36,19 +41,27 @@ class MainFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initAdapter(view)
+        newsAdapter = initAdapter(
+            activity = activity,
+            view = view,
+            viewModel = viewModel,
+            viewModelAdapter = viewModelAdapter,
+            recyclerView = mBinding.newsRecyclerView,
+            navigationId = R.id.action_mainFragment_to_detailsFragment
+        )
 
-        viewModel.newsLiveData.observe(viewLifecycleOwner) { responce ->
-            when (responce) {
+        viewModel.newsLiveData.observe(viewLifecycleOwner) { response ->
+            when (response) {
                 is Resource.Success -> {
                     pag_progress_bar.visibility = View.INVISIBLE
-                    responce.data?.let {
-                        newsAdapter.differ.submitList(it.articles)
+                    response.data?.let {
+                        viewModelAdapter.news.postValue(viewModelAdapter.news.value?.plus(it.articles)) //TODO
+                        newsAdapter.differ.submitList(viewModelAdapter.news.value)
                     }
                 }
                 is Resource.Error -> {
                     pag_progress_bar.visibility = View.INVISIBLE
-                    responce.data?.let {
+                    response.data?.let {
                         Log.e("checkData", "MainFragment: error: $it")
                     }
                 }
@@ -58,20 +71,6 @@ class MainFragment : Fragment() {
 
             }
         }
-    }
-
-    private fun initAdapter(view: View) {
-        newsAdapter = NewsAdapter()
-        news_recycler_view.apply {
-            adapter = newsAdapter
-            layoutManager = LinearLayoutManager(activity)
-        }
-
-        newsAdapter.setOnItemClickListener {
-            val bundle = bundleOf("article" to it)
-            view.findNavController().navigate(R.id.action_mainFragment_to_detailsFragment, bundle)
-        }
-
     }
 
 }

@@ -7,11 +7,16 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.almazov.restapi.R
 import com.almazov.restapi.databinding.FragmentSearchBinding
 import com.almazov.restapi.screens.adapters.NewsAdapter
+import com.almazov.restapi.screens.adapters.NewsAdapterInterface
+import com.almazov.restapi.screens.adapters.NewsAdapterViewModel
 import com.almazov.restapi.utils.Resource
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_search.*
@@ -21,12 +26,13 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class SearchFragment : Fragment() {
+class SearchFragment : Fragment(), NewsAdapterInterface {
 
     private var _binding: FragmentSearchBinding? = null
     private val mBinding get() = _binding!!
 
     private val viewModel by viewModels<SearchViewModel>()
+    private val viewModelAdapter by viewModels<NewsAdapterViewModel>()
     lateinit var newsAdapter: NewsAdapter
 
     override fun onCreateView(
@@ -40,7 +46,14 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initAdapter()
+        newsAdapter = initAdapter(
+            activity = activity,
+            view = view,
+            viewModel = viewModel,
+            viewModelAdapter = viewModelAdapter,
+            recyclerView = mBinding.newsRecyclerView,
+            navigationId = R.id.action_searchFragment_to_detailsFragment
+        )
         var job: Job? = null
         edit_search.addTextChangedListener{ text: Editable? ->
             job?.cancel()
@@ -48,24 +61,24 @@ class SearchFragment : Fragment() {
                 delay(500L)
                 text?.let {
                     if (it.toString().isNotEmpty()) {
-                        viewModel.getSearchNews(query = it.toString())
+                        viewModel.makeQuery(query = it.toString())
                     }
                 }
             }
         }
 
-        viewModel.searchNewsLiveData.observe(viewLifecycleOwner) { responce ->
-            when (responce) {
+        viewModel.newsLiveData.observe(viewLifecycleOwner) { response ->
+            when (response) {
                 is Resource.Success -> {
                     pag_progress_bar.visibility = View.INVISIBLE
-                    responce.data?.let {
+                    response.data?.let {
                         newsAdapter.differ.submitList(it.articles)
                     }
                 }
                 is Resource.Error -> {
                     pag_progress_bar.visibility = View.INVISIBLE
-                    responce.data?.let {
-                        Log.e("checkData", "MainFragment: error: $it")
+                    response.data?.let {
+                        Log.e("checkData", "SearchFragment: error: $it")
                     }
                 }
                 is Resource.Loading -> {
@@ -73,14 +86,6 @@ class SearchFragment : Fragment() {
                 }
 
             }
-        }
-    }
-
-    private fun initAdapter() {
-        newsAdapter = NewsAdapter()
-        news_recycler_view.apply {
-            adapter = newsAdapter
-            layoutManager = LinearLayoutManager(activity)
         }
     }
 }

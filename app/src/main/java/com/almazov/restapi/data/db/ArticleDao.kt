@@ -10,8 +10,8 @@ interface ArticleDao {
     @Query("SELECT * FROM articles ORDER BY publishedAt DESC")
     fun getAllArticles() : LiveData<List<Article>>
 
-    @Query("SELECT url FROM articles")
-    fun getFavouriteUrls() : LiveData<List<String>>
+    @Query("SELECT EXISTS(SELECT * FROM articles WHERE url = :url)")
+    suspend fun checkFavouriteUrl(url: String) : Boolean
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertArticle(article: Article)

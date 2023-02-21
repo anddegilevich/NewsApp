@@ -17,6 +17,9 @@ import com.almazov.restapi.R
 import com.almazov.restapi.databinding.FragmentDetailsBinding
 import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class DetailsFragment : Fragment() {
@@ -47,6 +50,11 @@ class DetailsFragment : Fragment() {
             mBinding.articleTitle.text = article.title
             mBinding.articleDescription.text = article.description
 
+            MainScope().launch {
+                val favourite = MainScope().async {viewModel.checkFavouriteUrl(article.url)}
+                mBinding.iconFavourite.isChecked = favourite.await()
+            }
+
             mBinding.btnDetails.setOnClickListener {
                 try {
                     Intent().apply {
@@ -69,8 +77,12 @@ class DetailsFragment : Fragment() {
                 view.findNavController().popBackStack()
             }
 
-            mBinding.iconFavourite.setOnClickListener{
-                viewModel.saveFavouriteArticle(article)
+            mBinding.iconFavourite.setOnCheckedChangeListener { _, isChecked ->
+                if (isChecked) {
+                    viewModel.saveFavouriteArticle(article)
+                } else {
+                    viewModel.deleteFromFavouriteArticle(article)
+                }
             }
         }
     }

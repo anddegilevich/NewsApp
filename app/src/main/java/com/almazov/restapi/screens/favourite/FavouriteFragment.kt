@@ -6,24 +6,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.viewModelScope
-import androidx.recyclerview.widget.LinearLayoutManager
+import com.almazov.restapi.R
 import com.almazov.restapi.databinding.FragmentFavouriteBinding
 import com.almazov.restapi.screens.adapters.NewsAdapter
+import com.almazov.restapi.screens.adapters.NewsAdapterInterface
+import com.almazov.restapi.screens.adapters.NewsAdapterViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.fragment_favourite.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class FavouriteFragment : Fragment() {
+class FavouriteFragment : Fragment(), NewsAdapterInterface {
 
     private var _binding: FragmentFavouriteBinding? = null
     private val mBinding get() = _binding!!
 
     private val viewModel by viewModels<FavouriteViewModel>()
+    private val viewModelAdapter by viewModels<NewsAdapterViewModel>()
     lateinit var newsAdapter: NewsAdapter
 
     override fun onCreateView(
@@ -37,7 +34,14 @@ class FavouriteFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initAdapter()
+        newsAdapter = initAdapter(
+            activity = activity,
+            view = view,
+            viewModel = viewModel,
+            viewModelAdapter = viewModelAdapter,
+            recyclerView = mBinding.newsRecyclerView,
+            navigationId = R.id.action_favouriteFragment_to_detailsFragment
+        )
 
         viewModel.favouriteNewsLiveData.observe(viewLifecycleOwner) { articles ->
             newsAdapter.differ.submitList(articles)
@@ -46,12 +50,5 @@ class FavouriteFragment : Fragment() {
 
     }
 
-    private fun initAdapter() {
-        newsAdapter = NewsAdapter()
-        news_recycler_view.apply {
-            adapter = newsAdapter
-            layoutManager = LinearLayoutManager(activity)
-        }
-    }
 
 }

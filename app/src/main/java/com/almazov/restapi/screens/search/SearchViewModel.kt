@@ -1,9 +1,8 @@
 package com.almazov.restapi.screens.search
 
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.room.Query
+import com.almazov.restapi.abstract_classes.NewsViewModel
 import com.almazov.restapi.data.api.NewsRepository
 import com.almazov.restapi.model.NewsResponse
 import com.almazov.restapi.utils.Resource
@@ -12,26 +11,37 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SearchViewModel @Inject constructor(private val repository: NewsRepository): ViewModel(){
+class SearchViewModel @Inject constructor(private val repository: NewsRepository): NewsViewModel(){
 
-    val searchNewsLiveData: MutableLiveData<Resource<NewsResponse>> = MutableLiveData()
-    var searchNewsPage = 1
+    val newsLiveData: MutableLiveData<Resource<NewsResponse>> = MutableLiveData()
+    var newsPage = 1
+    var query = ""
 
     init {
-        getSearchNews("")
+        getSearchNews()
     }
 
-    fun getSearchNews(query: String) =
+    fun getSearchNews() =
         viewModelScope.launch {
-            searchNewsLiveData.postValue(Resource.Loading())
-            val response = repository.getSearchedNews(query = query, pageNumber = searchNewsPage)
+            newsLiveData.postValue(Resource.Loading())
+            val response = repository.getSearchedNews(query = query, pageNumber = newsPage)
             if (response.isSuccessful) {
                 response.body().let { res ->
-                    searchNewsLiveData.postValue(Resource.Success(res))
+                    newsLiveData.postValue(Resource.Success(res))
                 }
             } else {
-                searchNewsLiveData.postValue(Resource.Error(message = response.message()))
+                newsLiveData.postValue(Resource.Error(message = response.message()))
             }
         }
+
+    fun makeQuery(query: String) {
+        this.query = query
+        getSearchNews()
+    }
+
+    override fun loadMore() {
+        newsPage += 1
+        getSearchNews()
+    }
 
 }

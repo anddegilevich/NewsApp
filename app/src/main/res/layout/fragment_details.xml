@@ -36,16 +36,16 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:tint="@color/teal"/>
 
-            <ImageView
+            <CheckBox
                 android:id="@+id/icon_favourite"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_marginEnd="9dp"
                 android:layout_marginBottom="18dp"
-                android:src="@drawable/ic_like"
+                android:button="@drawable/ic_like"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/icon_share"
-                app:tint="@color/teal"/>
+                android:buttonTint="@color/teal"/>
 
             <ImageView
                 android:id="@+id/icon_share"

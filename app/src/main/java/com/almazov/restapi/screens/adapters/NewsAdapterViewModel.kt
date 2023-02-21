@@ -1,5 +1,6 @@
-package com.almazov.restapi.screens.details
+package com.almazov.restapi.screens.adapters
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.almazov.restapi.data.api.NewsRepository
@@ -10,15 +11,9 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class DetailsViewModel @Inject constructor(private val repository: NewsRepository): ViewModel() {
+class NewsAdapterViewModel @Inject constructor(private val repository: NewsRepository): ViewModel() {
 
-    init {
-        getSavedArticles()
-    }
-
-    fun getSavedArticles() = viewModelScope.launch(Dispatchers.IO) {
-        repository.getFavouriteArticles()
-    }
+    var news: MutableLiveData<List<Article>> = MutableLiveData()
 
     fun saveFavouriteArticle(article: Article) = viewModelScope.launch(Dispatchers.IO) {
         repository.addToFavourite(article = article)
@@ -29,5 +24,4 @@ class DetailsViewModel @Inject constructor(private val repository: NewsRepositor
 
     suspend fun checkFavouriteUrl(url: String) =
         repository.checkFavouriteUrl(url = url)
-
 }

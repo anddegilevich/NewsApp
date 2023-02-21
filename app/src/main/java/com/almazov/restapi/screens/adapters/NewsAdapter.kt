@@ -3,15 +3,19 @@ package com.almazov.restapi.screens.adapters
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.almazov.restapi.R
 import com.almazov.restapi.model.Article
+import com.almazov.restapi.screens.favourite.FavouriteViewModel
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.item_article.view.*
+import kotlinx.coroutines.*
 
-class NewsAdapter: RecyclerView.Adapter<NewsAdapter.NewsViewHolder>() {
+class NewsAdapter(private val viewModel: NewsAdapterViewModel): RecyclerView.Adapter<NewsAdapter.NewsViewHolder>() {
 
     inner class NewsViewHolder(view: View): RecyclerView.ViewHolder(view)
 
@@ -44,6 +48,18 @@ class NewsAdapter: RecyclerView.Adapter<NewsAdapter.NewsViewHolder>() {
 
             setOnClickListener {
                 onItemClickListener?.let { it(article) }
+            }
+
+            MainScope().launch {
+                val favourite = MainScope().async {viewModel.checkFavouriteUrl(article.url)}
+                icon_favourite.isChecked = favourite.await()
+            }
+            icon_favourite.setOnCheckedChangeListener { _, isChecked ->
+                if (isChecked) {
+                    viewModel.saveFavouriteArticle(article)
+                } else {
+                    viewModel.deleteFromFavouriteArticle(article)
+                }
             }
         }
     }
