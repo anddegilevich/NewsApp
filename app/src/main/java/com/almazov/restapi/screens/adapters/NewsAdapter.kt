@@ -1,16 +1,15 @@
 package com.almazov.restapi.screens.adapters
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.almazov.restapi.R
 import com.almazov.restapi.model.Article
-import com.almazov.restapi.screens.favourite.FavouriteViewModel
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.item_article.view.*
 import kotlinx.coroutines.*
@@ -40,8 +39,9 @@ class NewsAdapter(private val viewModel: NewsAdapterViewModel): RecyclerView.Ada
 
     override fun onBindViewHolder(holder: NewsViewHolder, position: Int) {
         val article =  differ.currentList[position]
+
         holder.itemView.apply {
-            Glide.with(this).load(article.urlToImage).into(article_image)
+            Glide.with(this).load(article.urlToImage).error(R.drawable.no_image_sample).into(article_image)
             article_image.clipToOutline = true
             article_title.text = article.title
             article_date.text = article.publishedAt
@@ -60,6 +60,16 @@ class NewsAdapter(private val viewModel: NewsAdapterViewModel): RecyclerView.Ada
                 } else {
                     viewModel.deleteFromFavouriteArticle(article)
                 }
+            }
+
+            icon_share.setOnClickListener {
+                val intent = Intent(Intent.ACTION_SEND)
+                intent.apply {
+                    type = "text/plain"
+                    putExtra("Share this", article.url)
+                }
+                val chooser = Intent.createChooser(intent,"Share using...")
+                context.startActivity(chooser)
             }
         }
     }

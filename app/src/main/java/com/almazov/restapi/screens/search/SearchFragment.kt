@@ -2,22 +2,17 @@ package com.almazov.restapi.screens.search
 
 import android.os.Bundle
 import android.text.Editable
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
-import androidx.navigation.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.almazov.restapi.R
 import com.almazov.restapi.databinding.FragmentSearchBinding
 import com.almazov.restapi.screens.adapters.NewsAdapter
 import com.almazov.restapi.screens.adapters.NewsAdapterInterface
 import com.almazov.restapi.screens.adapters.NewsAdapterViewModel
-import com.almazov.restapi.utils.Resource
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_search.*
 import kotlinx.coroutines.Job
@@ -67,25 +62,8 @@ class SearchFragment : Fragment(), NewsAdapterInterface {
             }
         }
 
-        viewModel.newsLiveData.observe(viewLifecycleOwner) { response ->
-            when (response) {
-                is Resource.Success -> {
-                    pag_progress_bar.visibility = View.INVISIBLE
-                    response.data?.let {
-                        newsAdapter.differ.submitList(it.articles)
-                    }
-                }
-                is Resource.Error -> {
-                    pag_progress_bar.visibility = View.INVISIBLE
-                    response.data?.let {
-                        Log.e("checkData", "SearchFragment: error: $it")
-                    }
-                }
-                is Resource.Loading -> {
-                    pag_progress_bar.visibility = View.VISIBLE
-                }
-
-            }
+        viewModel.searchedNews.observe(viewLifecycleOwner) { articles ->
+            newsAdapter.differ.submitList(articles)
         }
     }
 }

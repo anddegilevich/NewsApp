@@ -13,8 +13,6 @@ import javax.inject.Inject
 @HiltViewModel
 class NewsAdapterViewModel @Inject constructor(private val repository: NewsRepository): ViewModel() {
 
-    var news: MutableLiveData<List<Article>> = MutableLiveData()
-
     fun saveFavouriteArticle(article: Article) = viewModelScope.launch(Dispatchers.IO) {
         repository.addToFavourite(article = article)
     }

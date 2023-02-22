@@ -34,7 +34,7 @@
                 android:src="@drawable/ic_arrow_back"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:tint="@color/teal"/>
+                app:tint="@color/main_color"/>
 
             <CheckBox
                 android:id="@+id/icon_favourite"
@@ -45,7 +45,7 @@
                 android:button="@drawable/ic_like"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/icon_share"
-                android:buttonTint="@color/teal"/>
+                android:buttonTint="@color/main_color"/>
 
             <ImageView
                 android:id="@+id/icon_share"
@@ -56,7 +56,7 @@
                 android:src="@drawable/ic_share"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:tint="@color/teal"/>
+                app:tint="@color/main_color"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
