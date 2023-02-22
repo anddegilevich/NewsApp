@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.MutableLiveData
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.almazov.restapi.R
 import com.almazov.restapi.databinding.FragmentMainBinding
 import com.almazov.restapi.screens.adapters.NewsAdapter
@@ -44,6 +46,12 @@ class MainFragment : Fragment(), NewsAdapterInterface {
 
         viewModel.news.observe(viewLifecycleOwner) { articles ->
             newsAdapter.differ.submitList(articles)
+        }
+        mBinding.newsSwipeRefresh.setOnRefreshListener {
+            viewModel.newsPage = 1
+            viewModel.news.postValue(emptyList())
+            viewModel.getNews()
+            mBinding.newsSwipeRefresh.isRefreshing = false
         }
     }
 

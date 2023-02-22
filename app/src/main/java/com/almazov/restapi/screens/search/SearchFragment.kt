@@ -65,5 +65,12 @@ class SearchFragment : Fragment(), NewsAdapterInterface {
         viewModel.searchedNews.observe(viewLifecycleOwner) { articles ->
             newsAdapter.differ.submitList(articles)
         }
+
+        mBinding.newsSwipeRefresh.setOnRefreshListener {
+            viewModel.newsPage = 1
+            viewModel.searchedNews.postValue(emptyList())
+            viewModel.getSearchedNews()
+            mBinding.newsSwipeRefresh.isRefreshing = false
+        }
     }
 }

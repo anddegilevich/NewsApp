@@ -21,7 +21,7 @@ class MainViewModel @Inject constructor(private val repository: NewsRepository):
         getNews()
     }
 
-    private fun getNews() = viewModelScope.launch {
+    fun getNews() = viewModelScope.launch {
         val response = repository.getNews(countryCode = countryCode, pageNumber = newsPage)
         if (response.isSuccessful) {
             val articles = response.body()?.articles ?: emptyList()

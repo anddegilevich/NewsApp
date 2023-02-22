@@ -16,7 +16,7 @@ class SearchViewModel @Inject constructor(private val repository: NewsRepository
     var newsPage = 1
     var query = ""
 
-    private fun getSearchedNews() =
+    fun getSearchedNews() =
         viewModelScope.launch {
             val response = repository.getSearchedNews(query = query, pageNumber = newsPage)
             if (response.isSuccessful) {

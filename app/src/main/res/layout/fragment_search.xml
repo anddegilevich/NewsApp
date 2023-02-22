@@ -27,15 +27,21 @@
         android:textColor="@color/greyBlack"
         android:textSize="17sp"/>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/news_recycler_view"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/news_swipe_refresh"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:clipToPadding="false"
-        android:paddingBottom="50dp"
-        tools:listitem="@layout/item_article"
-        tools:itemCount="2"/>
+        android:paddingBottom="50dp">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/news_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:listitem="@layout/item_article"/>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <ProgressBar
         android:id="@+id/pag_progress_bar"
