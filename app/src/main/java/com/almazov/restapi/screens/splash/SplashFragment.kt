@@ -11,7 +11,6 @@ import com.almazov.restapi.databinding.FragmentSplashBinding
 
 class SplashFragment : Fragment() {
 
-
     private var _binding: FragmentSplashBinding? = null
     private val mBinding get() = _binding!!
 

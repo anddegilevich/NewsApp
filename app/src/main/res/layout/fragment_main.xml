@@ -41,7 +41,6 @@
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-
     <ProgressBar
         android:id="@+id/pag_progress_bar"
         android:layout_width="wrap_content"
